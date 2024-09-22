@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import { useOutletContext } from "react-router-dom";
+import { useEffect } from "react";
 
 function Index() {
-  return (
-    <div>index</div>
-  )
+  const [setPostpageHeader] = useOutletContext();
+  useEffect(() => {
+    setPostpageHeader("Posts List");
+  }, [setPostpageHeader]);
+  return <div>index</div>;
 }
 
-export default Index
+export default Index;

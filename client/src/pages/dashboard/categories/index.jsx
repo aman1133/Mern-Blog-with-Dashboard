@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { fetchCategoriesByUser, deleteCategory } from "../../../features/categories/categoriesSlice"; 
+import {
+  fetchCategoriesByUser,
+  deleteCategory,
+} from "../../../features/categories/categoriesSlice";
 
 function Index() {
   const dispatch = useDispatch();
   const [setPageHeader] = useOutletContext();
 
   const { token } = useSelector((state) => state.auth.user);
+  // I added a array for categories
   const { categories, loading, error } = useSelector(
     (state) => state.categories
   );
@@ -20,6 +24,8 @@ function Index() {
 
   // Fetch categories when component mounts
   useEffect(() => {
+    // I added a if condition
+
     dispatch(fetchCategoriesByUser(token));
   }, [dispatch, token]);
 
@@ -31,7 +37,9 @@ function Index() {
 
   // Function to handle category deletion
   const handleDelete = (categoryId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
     if (confirmDelete) {
       dispatch(deleteCategory({ categoryId, token }));
     }
@@ -53,7 +61,7 @@ function Index() {
             </div>
             <div className="card-body table-responsive p-0">
               {loading && <p>Loading...</p>}
-              {error && <p>Error fetching categories: {error}</p>}
+              {error && <p>Error fetching categories: {error.message}</p>}
               {!loading && !error && (
                 <table className="table table-hover text-nowrap">
                   <thead>
@@ -67,16 +75,19 @@ function Index() {
                   <tbody>
                     {categories?.length > 0 ? (
                       categories.map((category, idx) => (
-                        <tr key={ idx }>
+                        <tr key={idx}>
                           <td>{idx + 1}</td>
                           <td>{category.title}</td>
                           <td>{truncateDescription(category.description)}</td>
                           <td>
-                            <Link to={`edit/${ category._id }`} className="btn btn-sm btn-primary mr-2"> 
+                            <Link
+                              to={`edit/${category._id}`}
+                              className="btn btn-sm btn-primary mr-2"
+                            >
                               Edit
                             </Link>
-                            <button 
-                              className="btn btn-sm btn-danger" 
+                            <button
+                              className="btn btn-sm btn-danger"
                               onClick={() => handleDelete(category._id)}
                             >
                               Delete
